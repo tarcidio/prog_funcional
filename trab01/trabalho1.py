@@ -4,9 +4,12 @@ def head(v):
 def tail(v):
     return v[1:]
 
+# Define uma lista que começa de start,start+1,...,end 
+# Sendo start < end 
 def list_(start, end):
     return list(range(start, end+1))
 
+# Filtra um vetor, baseado em uma função de condição que recebe o vetor como parametro
 def filter_(v, cond):
     if len(v) < 1:
         return []
@@ -17,9 +20,11 @@ def filter_(v, cond):
     else:
         return tail_filtered
 
+# Verifica se um numero é primo
 def is_prime(n):
     return is_prime_recursive(n,n//2)
 
+# Realiza as recursões para checar se um número é primo
 def is_prime_recursive(n,d):
     if d == 1:
         return True
@@ -29,12 +34,14 @@ def is_prime_recursive(n,d):
         else:
             return is_prime_recursive(n,d-1)
 
+# Realiza uma operação entre os valores adjacentes de uma lista e retorna a lista dessas operações
 def process_adjacent_elements(v, process):
     if len(v) <= 1:
         return []
     else:
         return [process(head(v),head(tail(v)))] + process_adjacent_elements(tail(v),process)
 
+# Seleciona um elemento da lista por meio de uma função de comparação 
 def select_element(v, compare):
     if len(v) == 0:
         return 0
