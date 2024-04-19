@@ -7,41 +7,34 @@ main = do
         x = read input_1
     let y :: Integer
         y = read input_2
-    let x_to_y_list :: [Integer]
-        x_to_y_list = list x y
     let prime_list :: [Integer]
-        prime_list = filter_ is_prime x_to_y_list
+        prime_list = filter is_prime [x..y]
     let prime_list_processed :: [Integer]
-        prime_list_processed = apply_between_items (-) prime_list 
+        prime_list_processed = apply_between_items (flip (-)) prime_list 
     let selected_element :: Integer
-        selected_element = select (>) prime_list_processed
+        selected_element = select (>) prime_list_processed 0
     putStrLn (show selected_element)
 
-list :: (Enum a) => a -> a -> [a]
-list x y = [x..y]
-
-filter_ :: (a->Bool) -> [a] -> [a]
-filter_ f [] = []
-filter_ f (h:t)
-    | f h = (h:filter_ f t) 
-    | otherwise = filter_ f t
-
 is_prime :: Integer->Bool
-is_prime x = is_prime_recursive x (div x 2)  
+is_prime num = is_prime_recursive num (div num 2)
 
 is_prime_recursive :: Integer -> Integer -> Bool
-is_prime_recursive x 0 = False 
-is_prime_recursive x 1 = True 
-is_prime_recursive x y 
-    | rem x y == 0 = False
-    | otherwise = is_prime_recursive x (y-1)
+is_prime_recursive 1 _ = False 
+is_prime_recursive _ 1 = True 
+is_prime_recursive num divisor 
+    | rem num divisor == 0 = False
+    | otherwise = is_prime_recursive num (divisor-1)
 
 apply_between_items :: (Num a) => (a-> a-> a) -> [a] -> [a]
-apply_between_items f (h:[])  = []
-apply_between_items f (h:t)  = (f (head t) h: apply_between_items f t)
+apply_between_items _ [] = []
+apply_between_items _ (_:[]) = []
+apply_between_items operation (item1:item2:other_items) = (operation item1 item2: apply_between_items operation (item2:other_items))
 
-select ::  (a->a->Bool) -> [a] -> a
-select f (h:[]) = h
-select f (h:t)  
-    | f h (select f t) = h 
-    | otherwise = select f t
+select :: (a->a->Bool) -> [a] -> a -> a 
+select comparison [] base = base  
+select comparison (item:[]) _ = item
+select comparison (item:other_items) base  
+    | comparison item recursion = item 
+    | otherwise = recursion
+    where
+        recursion = select comparison other_items base
