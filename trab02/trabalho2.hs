@@ -12,7 +12,7 @@ main = do
     let prime_list :: [Integer]
         prime_list = filter_ is_prime x_to_y_list
     let prime_list_processed :: [Integer]
-        prime_list_processed = apply_operation_between_neighbours_once (-) prime_list 
+        prime_list_processed = apply_between_items (-) prime_list 
     let selected_element :: Integer
         selected_element = select (>) prime_list_processed
     putStrLn (show selected_element)
@@ -22,12 +22,9 @@ list x y = [x..y]
 
 filter_ :: (a->Bool) -> [a] -> [a]
 filter_ f [] = []
-filter_ f (h:t) = if f h 
-                  then (h:filter_ f t) 
-                  else filter_ f t
-
-is_even :: Integer->Bool
-is_even x = if (rem x 2) == 0 then True else False
+filter_ f (h:t)
+    | f h = (h:filter_ f t) 
+    | otherwise = filter_ f t
 
 is_prime :: Integer->Bool
 is_prime x = is_prime_recursive x (div x 2)  
@@ -35,14 +32,16 @@ is_prime x = is_prime_recursive x (div x 2)
 is_prime_recursive :: Integer -> Integer -> Bool
 is_prime_recursive x 0 = False 
 is_prime_recursive x 1 = True 
-is_prime_recursive x y = if rem x y == 0 
-                         then False 
-                         else is_prime_recursive x (y-1)
+is_prime_recursive x y 
+    | rem x y == 0 = False
+    | otherwise = is_prime_recursive x (y-1)
 
-apply_operation_between_neighbours_once :: (Num a) => (a-> a-> a) -> [a] -> [a]
-apply_operation_between_neighbours_once f (h:[])  = []
-apply_operation_between_neighbours_once f (h:t)  = (f (head t) h: apply_operation_between_neighbours_once f t)
+apply_between_items :: (Num a) => (a-> a-> a) -> [a] -> [a]
+apply_between_items f (h:[])  = []
+apply_between_items f (h:t)  = (f (head t) h: apply_between_items f t)
 
 select ::  (a->a->Bool) -> [a] -> a
 select f (h:[]) = h
-select f (h:t) = if f h (head t) then h else select f t
+select f (h:t)  
+    | f h (select f t) = h 
+    | otherwise = select f t
