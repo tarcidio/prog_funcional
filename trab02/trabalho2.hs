@@ -13,17 +13,17 @@ main = do
         prime_list_processed = apply_between_items (flip (-)) prime_list 
     let selected_element :: Integer
         selected_element = select (>) prime_list_processed 0
-    putStrLn (show selected_element)
+    putStrLn $ show selected_element
 
 is_prime :: Integer->Bool
-is_prime num = is_prime_recursive num (div num 2)
+is_prime num = is_prime_recursive num $ num `div` 2
 
 is_prime_recursive :: Integer -> Integer -> Bool
 is_prime_recursive 1 _ = False 
 is_prime_recursive _ 1 = True 
 is_prime_recursive num divisor 
-    | rem num divisor == 0 = False
-    | otherwise = is_prime_recursive num (divisor-1)
+    | num `rem` divisor == 0 = False
+    | otherwise = is_prime_recursive num $ divisor-1 
 
 apply_between_items :: (Num a) => (a-> a-> a) -> [a] -> [a]
 apply_between_items _ [] = []
