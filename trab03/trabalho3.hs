@@ -2,15 +2,15 @@ import Data.List
 
 main :: IO ()
 main = do
-    input_1 <- getLine
-    let l :: [Int]
-        l = map read $ words input_1
+    input_1 <- getLine 
     putStrLn $ 
         show $
         maximum $
         (++) [0] $
         map length $
-        group_elements (operation_on_first_two_elements (<)) l
+        group_elements (operation_on_first_two_elements (<)) $
+        map read $ 
+        words input_1
         
 group_elements :: ([a]->Bool) -> [a] -> [[a]]
 group_elements _ [] = []
