@@ -59,7 +59,7 @@ main = do
     let numbers = map read $ words input :: [Int]
     -- let numbers = [1,4,4,5,6,4,5,5,10,0,1,7,3,6,4,10,2,8,6]
     -- let numbers = [10,10,10,10,10,10,10,10,10,10,10,10]
-    let text = show $ printFrames $ toFrames numbers
+    let text = printFrames $ toFrames numbers
     let value = show $ score numbers 1
     let answer = text ++ " | " ++ value
     putStrLn answer
